@@ -14,7 +14,6 @@ DIR_NAME = 'Indian_Cities_Stateswise'
 
 state_name = []
 
-
 req_date = requests.get(JSON_URL)
 req_India = requests.get(JSON_INDIA)
 
@@ -27,8 +26,6 @@ for st in statesData.index:
 unwanted_st = {'UN', 'TT', 'Other State', 'Other Region', 'Other', 'Unknown'} 
 state_name = [ele for ele in state_name if ele not in unwanted_st]
 
-
-    
 
 dtcolNames =[]
 
@@ -69,20 +66,16 @@ for st in state_name:
         for dis in distNames.index:
             #print (st + " : " + dis)
             dist_name.append(dis)
- 
-  
+
         # items to be removed 
         unwanted_elem = {'Foreign Evacuees', 'Other State', 'Other Region', 'Others', 'Other', 'Unknown'} 
-  
         dist_name = [ele for ele in dist_name if ele not in unwanted_elem]
             
         file_t = DIR_NAME + "/" + state_dir + "/" + state_dir + '_total_confirmed_cases.csv'
         file_r = DIR_NAME + "/" + state_dir + "/" + state_dir + '_total_recovered_cases.csv'
         file_d = DIR_NAME + "/" + state_dir + "/" + state_dir + '_total_Death_toll.csv'
                         
-               
-                
-         
+  
         for dist  in dist_name:   
             
             i=0
@@ -96,7 +89,6 @@ for st in state_name:
             covidDeath.append(st_name + "," + st + "," + dist + ",")
     
             covid = df(req.json()[st]['districts'][dist])
-            
             
             for conf, dt in zip(covid.dates, covid.index):
                 dt = dt + ","
@@ -116,9 +108,7 @@ for st in state_name:
                             covidDeath.append("0,")
                             
                     i = index
-                
-               
-                    
+            
                 for t in conf.keys():
                     if 'total' in t:
                         if 'confirmed' in (conf['total'].keys()):
@@ -135,19 +125,14 @@ for st in state_name:
                             covidDeath.append(str(conf['total']['deceased']) + ",")
                         if not 'deceased' in (conf['total'].keys()):
                             covidDeath.append("0,")
-            
-                            
-            # Data updatation for NODATA
-          
+ 
             if dt != dtcolNames[len(dtcolNames)-1]:
                 diff = len(dtcolNames) - dtcolNames.index(dt)
                 for n in range(diff):
                     covidData.append(covidData[len(covidData)-1])
                     covidDeath.append(covidDeath[len(covidRec)-1])
                 covidRec.append(covidRec[len(covidRec)-1])
-            
-       
-            
+        
             with open(file_t, 'w') as f:
                 f.writelines("State, State Code, Cities,")
                 f.writelines(dtcolNames)
@@ -164,7 +149,7 @@ for st in state_name:
                 f.writelines(covidDeath)            
         
     else:
-        print("State without sistrict's data : "+ st)
+        print("State without district's data : "+ st)
     
         
     
